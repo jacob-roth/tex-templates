@@ -1,0 +1,256 @@
+%
+%%
+%%% jmr commands
+%%
+%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{jmrcommands}[2022/02 Commands etc]
+
+\RequirePackage{imakeidx}
+\RequirePackage{xstring}
+\RequirePackage{xcolor}
+\newcommand{\mathopfont}{\mathrm}
+\DeclareOption{mathopsf}{\renewcommand{\mathopfont}{\mathsf}}
+\DeclareOption{mathoprm}{\renewcommand{\mathopfont}{\mathrm}}
+\DeclareOption*{\PackageWarning{jmrcommands}{Unknown \CurrentOption}}
+\ProcessOptions\relax
+
+%
+%%
+%%% commands helper
+%%
+% 
+
+%%% calcing expression (see \seq)
+%---
+\ExplSyntaxOn
+  \cs_new_eq:NN \CALC \fp_eval:n
+\ExplSyntaxOff
+
+\newcounter{argcnt}
+\makeatletter
+\newcommand{\newarray}[2]{% \newarray{<array>}{<csv list>}
+  \setcounter{argcnt}{0}% Restart argument count
+  \renewcommand{\do}[1]{% With each element do...
+    \stepcounter{argcnt}% Next arg
+    \expandafter\gdef\csname #1@\theargcnt\endcsname{##1}% Store arg in \<array>@<num>
+  }%
+  \docsvlist{#2}% Store array
+  \expandafter\xdef\csname #1@0\endcsname{\theargcnt}% Store array element count
+}
+\newcommand{\getelement}[2]{% \getelement{<array>}{<num>}
+  \@ifundefined{#1@0}% <array> not defined
+    {\@latex@error{Array #1 undefined}\@ehc}{}
+  \expandafter\ifnum\csname #1@0\endcsname<#2 % <num> out of range
+    \@latex@error{Array #1 only has \csname #1@0\endcsname\space elements}\@ehc
+  \fi
+  \csname #1@#2\endcsname% Print element
+}
+\newcommand{\calc}[1]{\expandafter\CALC\expandafter{#1}}% calculations
+\makeatother
+%---
+
+%%% footnote in tcolorbox
+%---
+\makeatletter
+\let\original@footnote\footnote
+\newcommand{\align@footnote}[1]{%
+  \ifmeasuring@
+    \chardef\@tempfn=\value{footnote}%
+    \footnotemark
+    \setcounter{footnote}{\@tempfn}%
+  \else
+    \iffirstchoice@
+      \original@footnote{#1}%
+    \fi
+  \fi}
+\pretocmd{\start@align}{\let\footnote\align@footnote}{}{}
+\makeatother
+%---
+
+%
+%%
+%%% custom commands
+%%
+%
+
+%%% math operators
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\Argmin}{Arg\,min}
+\DeclareMathOperator*{\find}{\mathopfont{find}}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\Argmax}{Arg\,max}
+\DeclareMathOperator*{\arginf}{arg\,inf}
+\DeclareMathOperator*{\argsup}{arg\,sup}
+
+%%% symbols
+\DeclareFontFamily{OMX}{MnSymbolE}{}
+\DeclareFontShape{OMX}{MnSymbolE}{m}{n}{
+    <-6>  MnSymbolE5
+   <6-7>  MnSymbolE6
+   <7-8>  MnSymbolE7
+   <8-9>  MnSymbolE8
+   <9-10> MnSymbolE9
+  <10-12> MnSymbolE10
+  <12->   MnSymbolE12}{}
+\DeclareSymbolFont{mnlargesymbols}{OMX}{MnSymbolE}{m}{n}
+\SetSymbolFont{mnlargesymbols}{bold}{OMX}{MnSymbolE}{b}{n}
+\DeclareMathDelimiter{\llangle}{\mathopen}{mnlargesymbols}{'164}{mnlargesymbols}{'164}
+\DeclareMathDelimiter{\Rangle}{\mathclose}{mnlargesymbols}{'171}{mnlargesymbols}{'171}
+
+%
+%%
+%%% custom shortcuts
+%%
+%
+
+%%% general math
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Symmetric}{\mathbb{S}}
+\newcommand{\real}[1]{\mathfrak{Re}\!\left(#1\right)}
+\newcommand{\imag}[1]{\mathfrak{Im}\!\left(#1\right)}
+\newcommand{\ind}{\mathds{1}}
+\newcommand{\dee}{\mathrm{d}}
+\newcommand{\dd}[1]{\frac{\dee}{\dee #1}}
+\newcommand{\dom}{\mathopfont{dom}}
+\DeclarePairedDelimiterXPP\relint[1]{\operatorname{\mathopfont{relint}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+\DeclarePairedDelimiterXPP\int[1]{\operatorname{\mathopfont{int}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}%optional param size, e.g. \abs[big]{x^2}
+\DeclarePairedDelimiterXPP\cl[1]{\operatorname{\mathopfont{cl}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+\DeclarePairedDelimiterXPP\dom[1]{\operatorname{\mathopfont{dom}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiterXPP\sign[1]{\operatorname{\mathopfont{sign}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+\newcommand{\seq}[3]{#1_{#2},#1_{\calc{#2+1}},\ldots,#1_{#3}} % \seq{X}{1}{n} = X_1,X_2,...X_n
+\newcommand{\lbar}[1]{\underbar{$#1$}}
+\DeclarePairedDelimiterXPP\vol[1]{\operatorname{\mathopfont{vol}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+\newcommand{\Lip}[1]{\mathopfont{Lip}\left(#1\right)}
+\newcommand{\contradict}{\Rightarrow\!\Leftarrow}
+\newcommand{\Id}{\mathopfont{Id}}
+\newcommand{\extended}[1]{\overline{\underline{#1}}}
+
+%%% optimization
+\DeclarePairedDelimiter{\LR}{[}{]}
+\DeclareDocumentCommand \prox { o m m } {% optional mandatory mandatory: https://tex.stackexchange.com/questions/1742/automatic-left-and-right-commands
+  \IfNoValueTF {#1} {%
+    \textbf{prox}_{#2}\LR{#3}%
+  }{%
+    \textbf{prox}_{#2}\LR[#1]{#3}%
+  }%
+}
+\DeclareDocumentCommand \proj { o m m } {% optional mandatory mandatory: https://tex.stackexchange.com/questions/1742/automatic-left-and-right-commands
+  \IfNoValueTF {#1} {%
+    \textbf{proj}_{#2}\LR{#3}%
+  }{%
+    \textbf{proj}_{#2}\LR[#1]{#3}%
+  }%
+}
+% \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}%optional param size, e.g. \norm[big]{x^2}: https://tex.stackexchange.com/questions/297253/norm-symbol-have-different-sizes-in-equation
+% \newcommand{\inner}[2]{\left\langle#1{\,,\,}#2\right\rangle}
+\DeclarePairedDelimiterX{\inner}[2]{\langle}{\rangle}{#1, #2}
+\DeclarePairedDelimiterXPP\len[1]{\operatorname{\mathopfont{len}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+\DeclarePairedDelimiterXPP\conv[1]{\operatorname{\mathopfont{conv}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+\DeclarePairedDelimiterXPP\convexhull[1]{\operatorname{\mathopfont{cvx}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+\DeclarePairedDelimiterXPP\concavehull[1]{\operatorname{\mathopfont{ccv}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+\newcommand{\primal}{(\mathopfont{P})}
+\newcommand{\dual}{(\mathopfont{D})}
+\newcommand{\feas}{\mathopfont{F}}
+\newcommand{\opt}{\mathopfont{OPT}}
+\newcommand{\alg}{\mathopfont{Alg}}
+\newcommand{\rlax}{(\mathopfont{R})}
+\newcommand{\primaldual}{(\mathopfont{P}\text{-}\mathopfont{D})}
+\newcommand{\existence}{(\mathopfont{E})}
+\newcommand{\poly}[1]{\mathfrak{P}\!\left[#1\right]}
+\newcommand{\tangentcone}[2]{\mathcal{T}\!\left(#1;#2\right)}
+\newcommand{\linearcone}[2]{\mathcal{L}\!\left(#1;#2\right)}
+\newcommand{\feasiblecone}[2]{\mathcal{F}\!\left(#1;#2\right)}
+\DeclarePairedDelimiterXPP\epi[1]{\operatorname{\mathopfont{epi}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+\DeclarePairedDelimiterXPP\cone[1]{\operatorname{\cone{epi}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+\newcommand{\vi}{\mathopfont{VI}}
+\newcommand{\xhat}{\hat{x}}
+\newcommand{\xbar}{\bar{x}}
+\newcommand{\xstar}{x^\star}
+\newcommand{\xstarr}{x^*}
+
+%%% linear algebra
+\DeclarePairedDelimiterXPP\range[1]{\operatorname{\mathopfont{range}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+\DeclarePairedDelimiterXPP\nullspace[1]{\operatorname{\mathopfont{null}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+\DeclarePairedDelimiterXPP\trace[1]{\operatorname{\mathopfont{trace}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+\DeclarePairedDelimiterXPP\det[1]{\operatorname{\mathopfont{det}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+\DeclarePairedDelimiterXPP\rank[1]{\operatorname{\mathopfont{rank}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+\DeclarePairedDelimiterXPP\diag[1]{\operatorname{\mathopfont{diag}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+\DeclarePairedDelimiterXPP\vec[1]{\operatorname{\mathopfont{vec}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+
+%%% probability
+%--- prob argument: https://tex.stackexchange.com/a/636626/144086
+\DeclarePairedDelimiterX{\probargument}[1]{[}{]}{\probargumentA{#1}}
+\NewDocumentCommand{\probargumentA}{>{\SplitArgument{1}{|}}m}{%
+  \probargumentB#1%
+}
+\NewDocumentCommand{\probargumentB}{mm}{%
+  \IfNoValueTF{#2}{% not conditional
+    #1%
+  }{% conditional
+    #1\;\delimsize|\;#2%
+  }%
+}
+%--- 
+\NewDocumentCommand{\prob}{e{_}}{% prob
+  \mathopfont{P}\IfValueT{#1}{_{#1}}\probargument
+}
+\NewDocumentCommand{\prob}{e{_}}{% expect
+  \mathopfont{E}\IfValueT{#1}{_{#1}}\probargument
+}
+\NewDocumentCommand{\variance}{e{_}}{% variance
+  \mathopfont{Var}\IfValueT{#1}{_{#1}}\probargument
+}
+\NewDocumentCommand{\covariance}{e{_}}{% covariance
+  \mathopfont{Cov}\IfValueT{#1}{_{#1}}\probargument
+}
+\newcommand{\field}{\mathcal{F}}
+\newcommand{\borel}[1]{\mathcal{B}({#1})}
+\newcommand{\algebra}{\mathcal{A}}
+\newcommand{\dtmc}{(X_n)_{n\geq0}}
+\newcommand{\ctmc}{(X(t))_{t\geq0}}
+\newcommand{\iid}{\overset{\mathopfont{iid}}{\sim}}
+\newcommand{\dist}[1]{\sim\mathopfont{#1}}% https://www.overleaf.com/project/5eacf06d2a17600001697726
+\newcommand{\pr}{\mathopfont{P}}
+\newcommand{\law}{\mathopfont{Law}}
+% convergence
+\DeclareMathOperator*{\pto}{\overset{p}{\to}}
+\DeclareMathOperator*{\dto}{\overset{d}{\to}}
+\DeclareMathOperator*{\asto}{\overset{a.s.}{\to}}
+\DeclareMathOperator*{\pequal}{\overset{p}{=}}
+\DeclareMathOperator*{\dequal}{\overset{d}{=}}
+\DeclareMathOperator*{\asequals}{\,\overset{a.s.}{=}\,}
+\DeclareMathOperator*{\plim}{plim}% https://tex.stackexchange.com/questions/125750/how-to-write-a-modified-limit-operator
+% distributions
+\DeclareMathOperator{\Multinom}{Multinom}
+\DeclareMathOperator{\Bern}{Bern}
+\DeclareMathOperator{\Unif}{Unif}
+\DeclareMathOperator{\Geom}{Geom}
+\DeclareMathOperator{\Normal}{Normal}
+\DeclareMathOperator{\Poi}{Poi}
+\DeclareMathOperator{\Exp}{Exp}
+\DeclareMathOperator{\Gam}{Gam}
+\DeclareMathOperator{\Bin}{Binom}
+
+%%% text
+\newcommand{\highlight}[1]{{\color{teal}{#1}}}
+\newcommand{\jr}[1]{\highlight{(#1)}}
+\newcommand{\red}[1]{{\color{red}{#1}}}
+\newcommand{\blue}[1]{{\color{blue}{#1}}}
+\newcommand{\purple}[1]{{\color{purple}{#1}}}
+\newcommand{\orange}[1]{{\color{orange}{#1}}}
+\newcommand{\teal}[1]{{\color{teal}{#1}}}
+\definecolor{ForestGreen}{RGB}{34,139,34}
+\newcommand{\green}[1]{{\color{ForestGreen}{#1}}}
+\newcommand{\grey}[1]{{\color{gray}{#1}}}
+\newcommand{\gray}[1]{{\color{gray}{#1}}}
+\newcommand{\black}[1]{{\color{black}{#1}}}

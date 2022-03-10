@@ -1,0 +1,8 @@
+% Node styles
+\tikzstyle{split}=[shape=rectangle, draw=blue, minimum size=0.5cm, tikzit fill=blue]
+\tikzstyle{event}=[shape=rectangle, draw=red, minimum size=0.5cm, tikzit fill=red]
+\tikzstyle{time}=[fill=white, draw={rgb,255: red,0; green,128; blue,128}, shape=rectangle, minimum size=0.5cm]
+% Edge styles
+\tikzstyle{arrow}=[draw=black, fill=none, tikzit fill=none, line width=0.5mm, tikzit draw=black, ->]
+\tikzstyle{line}=[draw=black, fill=none, tikzit fill=none, line width=0.5mm, tikzit draw=black, <->]
+\tikzstyle{closed}=[draw=black, fill=none, dashed, tikzit fill=none, line width=0.5mm, tikzit draw=black, -]

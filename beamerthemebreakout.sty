@@ -1,0 +1,127 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerthemebreakout}
+
+% requirements
+\RequirePackage{xcolor}
+\RequirePackage{amsmath,amssymb,amsfonts,bm}
+\RequirePackage{dsfont}
+\RequirePackage{mathtools}
+\usepackage[numbers]{natbib}
+% \RequirePackage[ruled,vlined]{algorithm2e}
+% \RequirePackage{algorithm}
+% \RequirePackage{algorithmicx}
+\RequirePackage{algpseudocode}
+\RequirePackage{subcaption}
+\RequirePackage{graphicx}
+\RequirePackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows,decorations.markings,decorations.pathmorphing}
+\RequirePackage{pgfplots}
+\pgfplotsset{compat=1.14}
+\usefonttheme{professionalfonts}
+\usefonttheme[onlymath]{serif}
+\RequirePackage{lmodern}
+\RequirePackage{tcolorbox}
+\RequirePackage{multicol}
+\tcbuselibrary{theorems}
+\tcbset{colback=white, colframe=NavyBlue, fonttitle=\bfseries}
+
+%%%
+%%% custom operators
+%%%
+\newcommand\myboxa[2][]{\tikz[overlay]\node[fill=blue!20,inner sep=2pt, anchor=text, rectangle, rounded corners=1mm,#1] {#2};\phantom{#2}}
+\newcommand\myboxb[2][]{\tikz[overlay]\node[fill=red!20,inner sep=2pt, anchor=text, rectangle, rounded corners=1mm,#1] {#2};\phantom{#2}}
+\newcommand\myboxc[2][]{\tikz[overlay]\node[fill=orange!20,inner sep=2pt, anchor=text, rectangle, rounded corners=1mm,#1] {#2};\phantom{#2}}
+
+%%%
+%%% formatting
+%%%
+\mode<presentation>% begin
+
+\definecolors{NavyBlue}
+\definecolors{WildStrawberry}
+\definecolor{breakout}{named}{NavyBlue}
+\definecolor{breakoutred}{named}{WildStrawberry}
+
+\setbeamercolor*{frametitle}{fg=breakout}
+\setbeamercolor*{title}{fg=breakout}
+\setbeamercolor*{frametitle}{fg=breakout}
+\setbeamercolor*{block title}{fg=breakout}
+\setbeamercolor*{itemize item}{fg=breakout}
+\setbeamercolor*{itemize subitem}{fg=breakout}
+\setbeamercolor*{itemize subsubitem}{fg=breakout}
+\setbeamercolor*{page number in head/foot}{fg=gray}
+\setbeamercolor*{page number in head/foot}{fg=black!40!white}
+\setbeamercolor*{button}{fg=white, bg=breakout!50!white}
+\setbeamercolor*{alerted text}{fg=breakoutred}
+
+\renewcommand{\beamerreturnbutton}[1]{%
+  \begingroup%
+  \setbeamercolor{button}{fg=white, bg=breakoutred!50!white}%
+  \beamerbutton{\insertreturnsymbol#1}%
+  \endgroup%
+}
+\renewcommand{\beamergotobutton}[1]{%
+  \begingroup%
+  \setbeamercolor{button}{fg=white, bg=NavyBlue!50!white}%
+  \beamerbutton{\insertgotosymbol#1}%
+  \endgroup%
+}
+
+\setbeamerfont{title}{shape=\bfseries}
+\setbeamerfont{frametitle}{shape=\bfseries}
+\setbeamerfont{block title}{shape=\bfseries}
+\setbeamertemplate{caption}[numbered]
+
+% \makeatletter
+% \algrenewcommand\ALG@beginalgorithmic{\rmdefault}
+% \makeatother
+
+\setbeamertemplate{navigation symbols}{}
+% \setbeamertemplate{footline}[frame number]
+\setbeamertemplate{footline}{
+    \hbox{%
+    \begin{beamercolorbox}[wd=\paperwidth,ht=3ex,dp=1.5ex,leftskip=2ex,rightskip=2ex]{page footer}%
+        \usebeamerfont{title in head/foot}%
+        \insertshorttitle \hfill
+            \insertsection \hspace{2em} \alert{\insertsubsection} \hfill
+        \insertframenumber{} / \inserttotalframenumber
+    \end{beamercolorbox}}%
+}
+
+\setbeamertemplate{theorems}[numbered]
+\newtheorem{assumption}[theorem]{Assumption}
+
+\mode<all>% end
+
+%%%
+%%% background block {left-offset}{top-offset}
+%%%
+\makeatletter
+\newbox\@backgroundblock
+\newenvironment{backgroundblock}[2]{%
+  \global\setbox\@backgroundblock=\vbox\bgroup%
+    \unvbox\@backgroundblock%
+    \vbox to0pt\bgroup\vskip#2\hbox to0pt\bgroup\hskip#1\relax%
+}{\egroup\egroup\egroup}
+\addtobeamertemplate{background}{\box\@backgroundblock}{}
+\makeatother
+
+%%%
+%%% foreground block {left-offset}{top-offset}
+%%%
+\makeatletter
+\newbox\@foregroundblock
+\newenvironment{foregroundblock}[2]{%
+  \global\setbox\@foregroundblock=\vbox\bgroup%
+    \unvbox\@foregroundblock%
+    \vbox to0pt\bgroup\vskip#2\hbox to0pt\bgroup\hskip#1\relax%
+}{\egroup\egroup\egroup}
+\addtobeamertemplate{sidebar canvas left}{\box\@foregroundblock}{}
+\makeatother
+
+%%%
+%%% theorems
+%%%
+\theoremstyle{definition}
+\newtheorem{remark}{Remark}

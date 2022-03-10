@@ -1,0 +1,64 @@
+\documentclass[paper=letter,DIV=10]{scrartcl}
+
+%
+%%
+%%% preamble
+%%
+%
+
+%%% margins
+\geometry{a4paper, margin=0.9in}
+
+%%% section counting
+\setcounter{secnumdepth}{0}
+
+%%% parskip and spacing
+\setlength\parindent{0pt}
+\setlength\parskip{6pt}
+\allowdisplaybreaks
+
+%%% hyperlinks etc
+\hypersetup{
+	linktoc=all,
+	colorlinks=true,
+	linkcolor={magenta},
+	filecolor=magenta,
+	urlcolor=magenta,
+	citecolor={green!50!black},
+}
+
+%%% commands
+\subimport{.}{commands.tex}
+
+\title{}
+\author{***}
+% \date{Due: 9/17/2020 @ 8pm}
+
+% need to read papers on your own regularly
+
+%%%
+%%% document
+%%%
+
+\begin{document}
+%
+\maketitle
+\tableofcontents
+%
+
+%%%
+%%% lit review
+%%%
+\section{Literature Review}
+
+%%%
+%%% references
+%%%
+\bibliographystyle{apalike}
+\bibliography{refs}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master:
+%%% End:
