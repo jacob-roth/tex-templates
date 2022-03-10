@@ -5,11 +5,26 @@
 %
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{jmrcommands}[2022/02 Commands etc]
+\ProvidesPackage{jmrcommands}[2022/03/10 v0.1]
 
+% packages for package
 \RequirePackage{imakeidx}
 \RequirePackage{xstring}
 \RequirePackage{xcolor}
+
+% packages for commands
+\RequirePackage{amsfonts}
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{xparse}
+\RequirePackage{etoolbox}
+\RequirePackage{calc}
+\RequirePackage{dsfont}
+\RequirePackage{mathtools}
+\RequirePackage{xcolor}
+\RequirePackage{xpatch}
+
+% math operator font option: mathopsf => mathsf, mathoprm => mathrm
 \newcommand{\mathopfont}{\mathrm}
 \DeclareOption{mathopsf}{\renewcommand{\mathopfont}{\mathsf}}
 \DeclareOption{mathoprm}{\renewcommand{\mathopfont}{\mathrm}}
@@ -114,15 +129,16 @@
 \newcommand{\Symmetric}{\mathbb{S}}
 \newcommand{\real}[1]{\mathfrak{Re}\!\left(#1\right)}
 \newcommand{\imag}[1]{\mathfrak{Im}\!\left(#1\right)}
+\newcommand{\iu}{\mathrm{i}\mkern1mu}% imaginary unit
 \newcommand{\ind}{\mathds{1}}
 \newcommand{\dee}{\mathrm{d}}
 \newcommand{\dd}[1]{\frac{\dee}{\dee #1}}
 \newcommand{\dom}{\mathopfont{dom}}
 \DeclarePairedDelimiterXPP\relint[1]{\operatorname{\mathopfont{relint}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
-\DeclarePairedDelimiterXPP\int[1]{\operatorname{\mathopfont{int}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+% \DeclarePairedDelimiterXPP\int[1]{\operatorname{\mathopfont{int}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}%optional param size, e.g. \abs[big]{x^2}
 \DeclarePairedDelimiterXPP\cl[1]{\operatorname{\mathopfont{cl}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
-\DeclarePairedDelimiterXPP\dom[1]{\operatorname{\mathopfont{dom}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+% \DeclarePairedDelimiterXPP\dom[1]{\operatorname{\mathopfont{dom}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 \DeclarePairedDelimiterXPP\sign[1]{\operatorname{\mathopfont{sign}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
@@ -182,10 +198,14 @@
 \DeclarePairedDelimiterXPP\range[1]{\operatorname{\mathopfont{range}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
 \DeclarePairedDelimiterXPP\nullspace[1]{\operatorname{\mathopfont{null}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
 \DeclarePairedDelimiterXPP\trace[1]{\operatorname{\mathopfont{trace}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
-\DeclarePairedDelimiterXPP\det[1]{\operatorname{\mathopfont{det}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+% \let\olddet\det
+\DeclarePairedDelimiterXPP\mydet[1]{\operatorname{\mathopfont{det}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+\renewcommand{\det}[1][]{\mydet{#1}}
 \DeclarePairedDelimiterXPP\rank[1]{\operatorname{\mathopfont{rank}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
 \DeclarePairedDelimiterXPP\diag[1]{\operatorname{\mathopfont{diag}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
-\DeclarePairedDelimiterXPP\vec[1]{\operatorname{\mathopfont{vec}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+% \let\oldvec\vec
+\DeclarePairedDelimiterXPP\myvec[1]{\operatorname{\mathopfont{vec}}}[]{}{#1}% https://tex.stackexchange.com/questions/635277/newcommand-with-option-for-bracket-size
+\renewcommand{\vec}[1][]{\myvec{#1}}
 
 %%% probability
 %--- prob argument: https://tex.stackexchange.com/a/636626/144086
@@ -204,7 +224,7 @@
 \NewDocumentCommand{\prob}{e{_}}{% prob
   \mathopfont{P}\IfValueT{#1}{_{#1}}\probargument
 }
-\NewDocumentCommand{\prob}{e{_}}{% expect
+\NewDocumentCommand{\expect}{e{_}}{% expect
   \mathopfont{E}\IfValueT{#1}{_{#1}}\probargument
 }
 \NewDocumentCommand{\variance}{e{_}}{% variance
@@ -254,3 +274,5 @@
 \newcommand{\grey}[1]{{\color{gray}{#1}}}
 \newcommand{\gray}[1]{{\color{gray}{#1}}}
 \newcommand{\black}[1]{{\color{black}{#1}}}
+
+\endinput
