@@ -1,0 +1,102 @@
+\documentclass[paper=letter,DIV=10]{scrartcl}
+
+%
+%%
+%%% preamble
+%%
+%
+
+%%% main packages
+\usepackage{import}
+\usepackage[utf8]{inputenc}
+\usepackage{babel}% https://tex.stackexchange.com/questions/482222/automatically-use-german-style-french-quotes
+\usepackage{geometry}
+\usepackage[titletoc,title]{appendix}
+\usepackage{xpatch}
+\xpretocmd{\appendixpagename}{\sffamily}{}{}
+\usepackage{amssymb,amsmath,amsthm,amsfonts,bm}
+\usepackage{subcaption}
+\usepackage{optidef}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{tikzit}
+
+%%% custom
+\usepackage{kbordermatrix}% http://www.hss.caltech.edu/~kcb/TeX/kbordermatrix.sty
+\usepackage[mathopsf]{jmrcommands}
+\usepackage{hw}
+
+%%% boxes
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\tcbset{breakable=true}
+\tcbuselibrary{theorems}
+\tcbuselibrary{skins}
+\usepackage{fancyvrb}% verbatim in box: https://tex.stackexchange.com/questions/86899/how-can-i-have-a-verbatim-text-in-specific-sized-box
+
+%%% graphics
+\usepackage{graphicx}
+
+%%% referencing
+\usepackage{hyperref}% load hyperref last... https://tex.stackexchange.com/a/415377/144086
+\usepackage[capitalise]{cleveref}
+
+%%% margins
+\geometry{a4paper, margin=0.9in}
+
+%%% parskip and spacing
+\setlength\parindent{0pt}
+\setlength\parskip{6pt}
+\allowdisplaybreaks
+
+%%% hyperlinks etc
+\hypersetup{
+	linktoc=all,
+	colorlinks=true,
+	linkcolor={magenta},%{green!50!black},
+	filecolor=magenta,
+	urlcolor=magenta,
+	citecolor={green!50!black},
+}
+%%% title
+\title{HW2}
+\author{Jake Roth}
+\date{March 15, 2022}
+
+%
+%%
+%%% start document
+%%
+%
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+%
+%%
+%%% Q1
+\begin{question}[Complex LMI]
+  TBD
+\end{question}
+\begin{proof}[Witeup]
+  TBD
+\end{proof}
+
+
+%%% references
+% \bibliographystyle{apalike}
+% \bibliography{../templates/refs}
+
+%
+%%
+%%% end document
+%%
+%
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master:
+%%% End:

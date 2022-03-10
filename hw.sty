@@ -1,0 +1,49 @@
+%
+%%
+%%% hw
+%%
+%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{hw}[2022/03/10 v0.1]
+
+% packages for packaging
+\RequirePackage{imakeidx}
+\RequirePackage{xstring}
+\RequirePackage{xcolor}
+
+% packages
+\RequirePackage{amssymb}
+
+%
+%%
+%%% hw environments
+%%
+%
+\newenvironment{question}[1][Question]%
+{{\section{#1}}\par\itshape}%
+{\hfill$\square$}%
+
+% redefine @endproof to include a `\qed` symbol
+\renewcommand{\qedsymbol}{$\blacksquare$}
+
+%%% theoremlike
+\theoremstyle{plain}
+\newtheorem{assumption}{Assumption}
+\newtheorem{claim}{Claim}
+\newtheorem{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{definition}
+\newtheorem{example}{Example}
+\newtheorem{definition}{Definition}
+
+%
+%%
+%%% end
+%%
+%
+
+\endinput
