@@ -1,0 +1,60 @@
+\documentclass[10pt,xcolor={dvipsnames}]{beamer}
+
+%%%
+%%% setup
+%%%
+
+% particular packages
+\usepackage{import}
+\usepackage{beamerthemebreakout}
+% \subimport{../}{beamerthemebreakout.sty}
+
+% files
+% \graphicspath{../../figures}
+
+% options
+\tcbset{left=0.25mm,right=0.25mm,fonttitle=\bfseries}
+
+%%%
+%%% begin
+%%%
+
+\title{***}
+\date{***}
+\author{***}
+%
+\begin{document}
+%
+{\setbeamertemplate{footline}{}%
+  \begin{frame}[noframenumbering]
+    \titlepage
+  \end{frame}
+}
+%
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+%
+\section{Problem Setting}
+%
+\begin{frame}[noframenumbering]
+  \begin{center}
+  { \Huge \textcolor{black}{Problem Setting} }
+  \end{center}
+\end{frame}
+
+%%%
+%%% references
+%%%
+
+\begin{frame}[t,allowframebreaks]
+  \frametitle{References}
+  \bibliographystyle{ieeetr}
+  \bibliography{../refs}
+\end{frame}
+
+%%%
+%%% end
+%%%
+
+\end{document}
